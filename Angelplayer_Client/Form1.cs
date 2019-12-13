@@ -9,6 +9,9 @@ namespace Angelplayer_Client
 {
     public partial class Form1 : Form
     {
+        /* Get Installed Applications from windows machine key
+         * @return String
+         */
         public void GetInstalledApps()
         {
             string output = "";
@@ -31,6 +34,9 @@ namespace Angelplayer_Client
             MessageBox.Show(output);
         }
 
+        /* Get IPv4 Address from System.Net
+         * @return String
+         */
         public static string GetIP4Address()
         {
             string IP4Address = String.Empty;
@@ -44,13 +50,16 @@ namespace Angelplayer_Client
             return IP4Address.TrimEnd(',');
         }
 
+        /* Get IPv4 Address from System.Net
+         * @return String
+         */
         public static string GetMacAddress() {
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
 
             string MACAddress = String.Empty;
             foreach (var nic in nics)
             {
-                // 只回傳 Ethernet 網卡的 MAC
+                //Catch Ethernet MAC only
                 if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
                 {
                     MACAddress += nic.GetPhysicalAddress().ToString() + ",";
@@ -58,6 +67,11 @@ namespace Angelplayer_Client
             }
             return MACAddress.TrimEnd(','); ;
         }
+
+
+        /* Get computer/Device Name
+         * @return String
+         */
         public static string GetDeviceName()
         {
             return Environment.MachineName;
@@ -70,6 +84,7 @@ namespace Angelplayer_Client
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //initialize all lbels to print device info.
             lbl_ip.Text = "Local IP: " + GetIP4Address();
             lbl_device_name.Text = "Device Name: " + GetDeviceName();
             lbl_mac.Text = "MAC Address: " + GetMacAddress();
@@ -79,27 +94,27 @@ namespace Angelplayer_Client
             //MessageBox.Show(flag.ToString());
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btn_send_Click(object sender, EventArgs e)
         {
             var ws = WS.client;
-            ws.OnMessage += (sender1, e1) =>
-                MessageBox.Show("server says: " + e1.Data);
             Action<bool> completed = ShowWindowsMessage;
             ws.SendAsync("Hello World", completed);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btn_connect_Click(object sender, EventArgs e)
         {
             try{
                 WS.client.Close();
                 WS.client = new WebSocket("ws://" + txt_host.Text + ":" + txt_port.Text);
                 WS.client.Connect();
+                WS.client.OnMessage += (sender1, e1) =>
+                    MessageBox.Show("server says: " + e1.Data);
                 MessageBox.Show("Connect to server successfully!");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            } 
+            }
         }
     }
 }

@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_send = new System.Windows.Forms.Button();
             this.txt_host = new System.Windows.Forms.TextBox();
             this.txt_port = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btn_connect = new System.Windows.Forms.Button();
             this.lbl_host = new System.Windows.Forms.Label();
             this.lbl_port = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,15 +40,15 @@
             this.lbl_mac = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button1
+            // btn_send
             // 
-            this.button1.Location = new System.Drawing.Point(434, 414);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(83, 37);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Send";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_send.Location = new System.Drawing.Point(434, 414);
+            this.btn_send.Name = "btn_send";
+            this.btn_send.Size = new System.Drawing.Size(83, 37);
+            this.btn_send.TabIndex = 0;
+            this.btn_send.Text = "Send";
+            this.btn_send.UseVisualStyleBackColor = true;
+            this.btn_send.Click += new System.EventHandler(this.btn_send_Click);
             // 
             // txt_host
             // 
@@ -64,15 +64,15 @@
             this.txt_port.Size = new System.Drawing.Size(100, 22);
             this.txt_port.TabIndex = 2;
             // 
-            // button2
+            // btn_connect
             // 
-            this.button2.Location = new System.Drawing.Point(339, 415);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(79, 37);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "connect";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btn_connect.Location = new System.Drawing.Point(339, 415);
+            this.btn_connect.Name = "btn_connect";
+            this.btn_connect.Size = new System.Drawing.Size(79, 37);
+            this.btn_connect.TabIndex = 3;
+            this.btn_connect.Text = "connect";
+            this.btn_connect.UseVisualStyleBackColor = true;
+            this.btn_connect.Click += new System.EventHandler(this.btn_connect_Click);
             // 
             // lbl_host
             // 
@@ -139,11 +139,15 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbl_port);
             this.Controls.Add(this.lbl_host);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btn_connect);
             this.Controls.Add(this.txt_port);
             this.Controls.Add(this.txt_host);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_send);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Angelplayer_Client";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
@@ -153,10 +157,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_send;
         private System.Windows.Forms.TextBox txt_host;
         private System.Windows.Forms.TextBox txt_port;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btn_connect;
         private System.Windows.Forms.Label lbl_host;
         private System.Windows.Forms.Label lbl_port;
         private System.Windows.Forms.Label label1;
