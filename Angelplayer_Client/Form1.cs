@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using WebSocketSharp;
@@ -78,6 +79,13 @@ namespace Angelplayer_Client
             return Environment.MachineName;
         }
 
+        private string StringToBase64(string srcText)
+        {
+            Byte[] bytesEncode = System.Text.Encoding.UTF8.GetBytes(srcText);
+            string dstText = Convert.ToBase64String(bytesEncode);
+            return dstText;
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -127,6 +135,7 @@ namespace Angelplayer_Client
             comm += GetDeviceName() + ":";
             comm += GetMacAddress();
             comm += GetInstalledApps();
+            comm = StringToBase64(comm);
             int max_length = 1000;
             while (comm.Length > 0) {
                 if (comm.Length < max_length)
