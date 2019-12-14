@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btn_send = new System.Windows.Forms.Button();
             this.txt_host = new System.Windows.Forms.TextBox();
             this.txt_port = new System.Windows.Forms.TextBox();
@@ -38,6 +39,9 @@
             this.lbl_ip = new System.Windows.Forms.Label();
             this.lbl_device_name = new System.Windows.Forms.Label();
             this.lbl_mac = new System.Windows.Forms.Label();
+            this.timer_send = new System.Windows.Forms.Timer(this.components);
+            this.txt_cid = new System.Windows.Forms.TextBox();
+            this.lbl_cid = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btn_send
@@ -56,6 +60,7 @@
             this.txt_host.Name = "txt_host";
             this.txt_host.Size = new System.Drawing.Size(100, 22);
             this.txt_host.TabIndex = 1;
+            this.txt_host.Text = "127.0.0.1";
             // 
             // txt_port
             // 
@@ -63,6 +68,7 @@
             this.txt_port.Name = "txt_port";
             this.txt_port.Size = new System.Drawing.Size(100, 22);
             this.txt_port.TabIndex = 2;
+            this.txt_port.Text = "7779";
             // 
             // btn_connect
             // 
@@ -128,11 +134,35 @@
             this.lbl_mac.TabIndex = 9;
             this.lbl_mac.Text = "lbl_mac";
             // 
+            // timer_send
+            // 
+            this.timer_send.Enabled = true;
+            this.timer_send.Interval = 30000;
+            this.timer_send.Tick += new System.EventHandler(this.timer_send_Tick);
+            // 
+            // txt_cid
+            // 
+            this.txt_cid.Location = new System.Drawing.Point(94, 386);
+            this.txt_cid.Name = "txt_cid";
+            this.txt_cid.Size = new System.Drawing.Size(100, 22);
+            this.txt_cid.TabIndex = 10;
+            // 
+            // lbl_cid
+            // 
+            this.lbl_cid.AutoSize = true;
+            this.lbl_cid.Location = new System.Drawing.Point(12, 389);
+            this.lbl_cid.Name = "lbl_cid";
+            this.lbl_cid.Size = new System.Drawing.Size(76, 17);
+            this.lbl_cid.TabIndex = 11;
+            this.lbl_cid.Text = "Custom ID:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(796, 459);
+            this.ClientSize = new System.Drawing.Size(794, 458);
+            this.Controls.Add(this.lbl_cid);
+            this.Controls.Add(this.txt_cid);
             this.Controls.Add(this.lbl_mac);
             this.Controls.Add(this.lbl_device_name);
             this.Controls.Add(this.lbl_ip);
@@ -167,6 +197,9 @@
         private System.Windows.Forms.Label lbl_ip;
         private System.Windows.Forms.Label lbl_device_name;
         private System.Windows.Forms.Label lbl_mac;
+        private System.Windows.Forms.Timer timer_send;
+        private System.Windows.Forms.TextBox txt_cid;
+        private System.Windows.Forms.Label lbl_cid;
     }
 }
 

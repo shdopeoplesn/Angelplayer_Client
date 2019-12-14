@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Threading;
 using System.Windows.Forms;
 using WebSocketSharp;
 
@@ -12,7 +13,7 @@ namespace Angelplayer_Client
         /* Get Installed Applications from windows machine key
          * @return String
          */
-        public void GetInstalledApps()
+        public string GetInstalledApps()
         {
             string output = "";
             string uninstallKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
@@ -24,14 +25,14 @@ namespace Angelplayer_Client
                     {
                         try
                         {
-                            output += sk.GetValue("DisplayName").ToString() + "\r\n";
+                            output += sk.GetValue("DisplayName").ToString() + ",";
                         }
                         catch (Exception ex)
                         { }
                     }
                 }
             }
-            MessageBox.Show(output);
+            return output.TrimEnd(',');
         }
 
         /* Get IPv4 Address from System.Net
@@ -98,7 +99,7 @@ namespace Angelplayer_Client
         {
             var ws = WS.client;
             Action<bool> completed = ShowWindowsMessage;
-            ws.SendAsync("Hello World", completed);
+            ws.SendAsync("test", completed);
         }
 
         private void btn_connect_Click(object sender, EventArgs e)
@@ -115,6 +116,32 @@ namespace Angelplayer_Client
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void timer_send_Tick(object sender, EventArgs e)
+        {
+            var ws = WS.client;
+            Action<bool> completed = ShowWindowsMessage;
+            String comm = txt_cid.Text + ":";
+            comm += GetIP4Address() + ":";
+            comm += GetDeviceName() + ":";
+            comm += GetMacAddress();
+            comm += GetInstalledApps();
+            int max_length = 1000;
+            while (comm.Length > 0) {
+                if (comm.Length < max_length)
+                {
+                    ws.SendAsync(comm, completed);
+                    break;
+                }
+                else {
+                    int len = comm.Length;
+                    ws.SendAsync(comm.Substring(0, max_length).ToString(), completed);
+                    comm = comm.Substring(max_length, len - max_length);
+                }
+                Thread.Sleep(10);
+            }
+            
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Angelplayer_Client
 {
     public class WS
     {
-        public static WebSocket client = new WebSocket("ws://127.0.0.1:3000");
+        public static WebSocket client = new WebSocket("ws://127.0.0.1:7779");
     }
 }
