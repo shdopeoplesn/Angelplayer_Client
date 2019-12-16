@@ -133,10 +133,12 @@ namespace Angelplayer_Client
             String comm = txt_cid.Text + ":";
             comm += GetIP4Address() + ":";
             comm += GetDeviceName() + ":";
-            comm += GetMacAddress();
+            comm += GetMacAddress() + ":";
             comm += GetInstalledApps();
             comm = StringToBase64(comm);
             int max_length = 1000;
+
+            ws.SendAsync(StringToBase64("SYN"), completed);
             while (comm.Length > 0) {
                 if (comm.Length < max_length)
                 {
@@ -150,7 +152,8 @@ namespace Angelplayer_Client
                 }
                 Thread.Sleep(10);
             }
-            
+            ws.SendAsync(StringToBase64("ACK"), completed);
+
         }
     }
 }
