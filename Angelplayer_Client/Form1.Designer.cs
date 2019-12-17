@@ -32,7 +32,7 @@ namespace Angelplayer_Client
             this.components = new System.ComponentModel.Container();
             this.txt_host = new System.Windows.Forms.TextBox();
             this.txt_port = new System.Windows.Forms.TextBox();
-            this.btn_connect = new System.Windows.Forms.Button();
+            this.btn_save = new System.Windows.Forms.Button();
             this.lbl_host = new System.Windows.Forms.Label();
             this.lbl_port = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -45,6 +45,8 @@ namespace Angelplayer_Client
             this.lbl_user_name = new System.Windows.Forms.Label();
             this.lbl_os_version = new System.Windows.Forms.Label();
             this.timer_reconnect = new System.Windows.Forms.Timer(this.components);
+            this.btn_unlock = new System.Windows.Forms.Button();
+            this.txt_passwd = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txt_host
@@ -63,15 +65,15 @@ namespace Angelplayer_Client
             this.txt_port.TabIndex = 2;
             this.txt_port.Text = "7779";
             // 
-            // btn_connect
+            // btn_save
             // 
-            this.btn_connect.Location = new System.Drawing.Point(114, 265);
-            this.btn_connect.Name = "btn_connect";
-            this.btn_connect.Size = new System.Drawing.Size(79, 37);
-            this.btn_connect.TabIndex = 3;
-            this.btn_connect.Text = "connect";
-            this.btn_connect.UseVisualStyleBackColor = true;
-            this.btn_connect.Click += new System.EventHandler(this.btn_connect_Click);
+            this.btn_save.Location = new System.Drawing.Point(114, 255);
+            this.btn_save.Name = "btn_save";
+            this.btn_save.Size = new System.Drawing.Size(79, 37);
+            this.btn_save.TabIndex = 3;
+            this.btn_save.Text = "save";
+            this.btn_save.UseVisualStyleBackColor = true;
+            this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
             // 
             // lbl_host
             // 
@@ -129,8 +131,7 @@ namespace Angelplayer_Client
             // 
             // timer_send
             // 
-            this.timer_send.Enabled = true;
-            this.timer_send.Interval = 5000;
+            this.timer_send.Interval = 30000;
             this.timer_send.Tick += new System.EventHandler(this.timer_send_Tick);
             // 
             // txt_cid
@@ -169,15 +170,34 @@ namespace Angelplayer_Client
             // 
             // timer_reconnect
             // 
-            this.timer_reconnect.Enabled = true;
-            this.timer_reconnect.Interval = 5000;
+            this.timer_reconnect.Interval = 10000;
             this.timer_reconnect.Tick += new System.EventHandler(this.timer_reconnect_Tick);
+            // 
+            // btn_unlock
+            // 
+            this.btn_unlock.Location = new System.Drawing.Point(12, 255);
+            this.btn_unlock.Name = "btn_unlock";
+            this.btn_unlock.Size = new System.Drawing.Size(79, 37);
+            this.btn_unlock.TabIndex = 14;
+            this.btn_unlock.Text = "unlock";
+            this.btn_unlock.UseVisualStyleBackColor = true;
+            this.btn_unlock.Click += new System.EventHandler(this.btn_unlock_Click);
+            // 
+            // txt_passwd
+            // 
+            this.txt_passwd.Location = new System.Drawing.Point(199, 227);
+            this.txt_passwd.Name = "txt_passwd";
+            this.txt_passwd.Size = new System.Drawing.Size(100, 22);
+            this.txt_passwd.TabIndex = 15;
+            this.txt_passwd.Visible = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(371, 340);
+            this.Controls.Add(this.txt_passwd);
+            this.Controls.Add(this.btn_unlock);
             this.Controls.Add(this.lbl_os_version);
             this.Controls.Add(this.lbl_user_name);
             this.Controls.Add(this.lbl_cid);
@@ -188,7 +208,7 @@ namespace Angelplayer_Client
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbl_port);
             this.Controls.Add(this.lbl_host);
-            this.Controls.Add(this.btn_connect);
+            this.Controls.Add(this.btn_save);
             this.Controls.Add(this.txt_port);
             this.Controls.Add(this.txt_host);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -202,12 +222,13 @@ namespace Angelplayer_Client
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
         private System.Windows.Forms.TextBox txt_host;
         private System.Windows.Forms.TextBox txt_port;
-        private System.Windows.Forms.Button btn_connect;
+        private System.Windows.Forms.Button btn_save;
         private System.Windows.Forms.Label lbl_host;
         private System.Windows.Forms.Label lbl_port;
         private System.Windows.Forms.Label label1;
@@ -220,6 +241,8 @@ namespace Angelplayer_Client
         private System.Windows.Forms.Label lbl_user_name;
         private System.Windows.Forms.Label lbl_os_version;
         private System.Windows.Forms.Timer timer_reconnect;
+        private System.Windows.Forms.Button btn_unlock;
+        private System.Windows.Forms.TextBox txt_passwd;
     }
 }
 

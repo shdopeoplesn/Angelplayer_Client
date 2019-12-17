@@ -64,6 +64,7 @@
     <ApplicationIcon>SSS.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -81,6 +82,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="encrypt.cs" />
     <Compile Include="ws.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

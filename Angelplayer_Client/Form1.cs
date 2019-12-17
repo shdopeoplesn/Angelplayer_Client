@@ -1,6 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Win32;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net;
@@ -9,11 +11,18 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using WebSocketSharp;
+using static Angelplayer_Client.Encrypt;
 
 namespace Angelplayer_Client
 {
     public partial class Form1 : Form
     {
+        //declare NotifyIcon to make application show in right-down toolbox
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+
+        private const string FILE_NAME = "saves.dat";
+        private const string FILE_KEY = "tachibana_kanade_maji_tenshi";
+
         /* Get Installed Applications from windows machine key
          * @return String
          */
@@ -139,6 +148,36 @@ namespace Angelplayer_Client
 
         public void InitUI()
         {
+            //先前有存檔的情況
+            if (File.Exists(FILE_NAME))
+            {
+                string saves = "";
+                using (FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read))
+                {
+                    using (BinaryReader r = new BinaryReader(fs))
+                    {
+                        saves = r.ReadString();
+                    }
+                }
+                saves = StringEncrypt.aesDecryptBase64(saves, FILE_KEY);
+
+                //get saved data and put to textbox
+                string[] data = saves.Split(',');
+                txt_host.Text = data[0];
+                txt_port.Text = data[1];
+                txt_cid.Text = data[2];
+                txt_passwd.Text = data[3];
+
+                btn_unlock.Enabled = true;
+                btn_save.Enabled = false;
+                //disable all of textbox
+                txt_cid.Enabled = false;
+                txt_host.Enabled = false;
+                txt_port.Enabled = false;
+            }
+            else {
+                btn_unlock.Enabled = false;
+            }
             //initialize all lbels to print device info.
             lbl_ip.Text = "Local IP: " + GetIP4Address();
             lbl_device_name.Text = "Device Name: " + GetDeviceName();
@@ -146,8 +185,6 @@ namespace Angelplayer_Client
             lbl_user_name.Text = "User Name: " + GetUserName();
             lbl_os_version.Text = "OS version: " + GetOSVersion();
         }
-        //declare NotifyIcon to make application show in right-down toolbox
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
 
         public Form1()
         {
@@ -162,15 +199,43 @@ namespace Angelplayer_Client
         private void Form1_Load(object sender, EventArgs e)
         {
             InitUI();
+            timer_send.Start();
+            timer_reconnect.Start();
         }
         private static void ShowWindowsMessage(bool flag)
         {
             //MessageBox.Show(flag.ToString());
         }
 
-        private void btn_connect_Click(object sender, EventArgs e)
+        private void btn_save_Click(object sender, EventArgs e)
         {
             ConnectToSocket();
+            if (File.Exists(FILE_NAME))
+            {
+                File.Delete(FILE_NAME);
+            }
+
+            string pw = Interaction.InputBox("input admin password", "input admin password", "", -1, -1);
+
+            using (FileStream fs = new FileStream(FILE_NAME, FileMode.CreateNew))
+            {
+                using (BinaryWriter w = new BinaryWriter(fs))
+                {
+                    string saves = txt_host.Text + ",";
+                    saves += txt_port.Text + ",";
+                    saves += txt_cid.Text + ",";
+                    saves += pw;
+                    saves = StringEncrypt.aesEncryptBase64(saves, FILE_KEY);
+                    w.Write(saves);
+                }
+            }
+
+            txt_passwd.Text = pw;
+            txt_cid.Enabled = false;
+            txt_host.Enabled = false;
+            txt_port.Enabled = false;
+            btn_save.Enabled = false;
+            btn_unlock.Enabled = true;
         }
 
         private void timer_send_Tick(object sender, EventArgs e)
@@ -239,6 +304,21 @@ namespace Angelplayer_Client
             this.Show();
             this.WindowState = FormWindowState.Normal;
             this.notifyIcon1.Visible = false;
+        }
+
+        private void btn_unlock_Click(object sender, EventArgs e)
+        {
+            string pw = Interaction.InputBox("input admin password", "input admin password");
+            if (pw != txt_passwd.Text)
+            {
+                MessageBox.Show("incorrect password!");
+                return;
+            }
+            btn_save.Enabled = true;
+            txt_cid.Enabled = true;
+            txt_host.Enabled = true;
+            txt_port.Enabled = true;
+            btn_unlock.Enabled = false;
         }
     }
 }
