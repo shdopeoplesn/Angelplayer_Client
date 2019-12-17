@@ -131,6 +131,7 @@ namespace Angelplayer_Client
             return dstText;
         }
 
+
         public void ConnectToSocket(){
             try
             {
@@ -146,9 +147,10 @@ namespace Angelplayer_Client
             }
         }
 
+        //Form UI Initilize
         public void InitUI()
         {
-            //先前有存檔的情況
+            //if save.dat exist
             if (File.Exists(FILE_NAME))
             {
                 string saves = "";
@@ -176,6 +178,7 @@ namespace Angelplayer_Client
                 txt_port.Enabled = false;
             }
             else {
+                //if save.dat is not exitst,then doesn't need to unlock
                 btn_unlock.Enabled = false;
             }
             //initialize all lbels to print device info.
@@ -199,6 +202,7 @@ namespace Angelplayer_Client
         private void Form1_Load(object sender, EventArgs e)
         {
             InitUI();
+            //start send and auto-reconnect timer
             timer_send.Start();
             timer_reconnect.Start();
         }
@@ -207,16 +211,22 @@ namespace Angelplayer_Client
             //MessageBox.Show(flag.ToString());
         }
 
+        //When Save button had been clicked
         private void btn_save_Click(object sender, EventArgs e)
         {
+            //connect to new socket server
             ConnectToSocket();
+            
+            //delete save.dat when it already existed
             if (File.Exists(FILE_NAME))
             {
                 File.Delete(FILE_NAME);
             }
 
+            //get new admin password
             string pw = Interaction.InputBox("input admin password", "input admin password", "", -1, -1);
 
+            //write to save.dat
             using (FileStream fs = new FileStream(FILE_NAME, FileMode.CreateNew))
             {
                 using (BinaryWriter w = new BinaryWriter(fs))
