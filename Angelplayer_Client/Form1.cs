@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Drawing;
 using System.IO;
@@ -39,6 +40,21 @@ namespace Angelplayer_Client
                         try
                         {
                             output += sk.GetValue("DisplayName").ToString() + ",";
+                            output += sk.GetValue("DisplayVersion").ToString() + ",";
+                            output += sk.GetValue("InstallDate").ToString() + ",";
+                            if (sk.GetValue("InstallSource") == null)
+                            {
+                                if (sk.GetValue("InstallLocation") == null)
+                                {
+                                    output += "N/A,";
+                                }
+                                else {
+                                    output += sk.GetValue("InstallLocation").ToString() + ",";
+                                }
+                            }
+                            else {
+                                output += sk.GetValue("InstallSource").ToString() + ",";
+                            }
                         }
                         catch (Exception ex)
                         { }
@@ -205,6 +221,8 @@ namespace Angelplayer_Client
             //start send and auto-reconnect timer
             timer_send.Start();
             timer_reconnect.Start();
+            //connect to new socket server
+            ConnectToSocket();
         }
         private static void ShowWindowsMessage(bool flag)
         {
@@ -252,14 +270,18 @@ namespace Angelplayer_Client
         {
             var ws = WS.client;
             Action<bool> completed = ShowWindowsMessage;
-            String comm = txt_cid.Text + ":";
-            comm += GetIP4Address() + ":";
-            comm += GetMacAddress() + ":";
-            comm += GetDeviceName() + ":";
-            comm += GetOSVersion() + ":";
-            comm += GetUserName() + ":";
-            comm += GetInstalledApps();
-            comm = StringToBase64(comm);
+            String comm = "";
+            comm = StringToBase64(JsonConvert.SerializeObject(new
+            {
+                code = 200,
+                cid = txt_cid.Text,
+                ipv4 = GetIP4Address(),
+                mac = GetMacAddress(),
+                device_name = GetDeviceName(),
+                os = GetOSVersion(),
+                user_name = GetUserName(),
+                apps = GetInstalledApps(),
+            }));
             int max_length = 1000;
 
             ws.SendAsync(StringToBase64("SYN"), completed);
