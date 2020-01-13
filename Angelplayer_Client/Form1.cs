@@ -24,6 +24,30 @@ namespace Angelplayer_Client
         private const string FILE_NAME = "saves.dat";
         private const string FILE_KEY = "tachibana_kanade_maji_tenshi";
 
+        /* Get Memory size
+         * @return String
+         */
+        public string GetMemory() 
+        {
+            ulong mem = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / 1024 / 1024;
+            return mem.ToString() + "MB";
+        }
+
+
+        /* Get CPU type
+         * @return String
+         */
+        public string GetCPU()
+        {
+            String cpu_name = "";
+            ManagementObjectSearcher myProcessorObject = new ManagementObjectSearcher("select * from Win32_Processor");
+
+            foreach (ManagementObject obj in myProcessorObject.Get())
+            {
+                cpu_name = obj["Name"].ToString();
+            }
+            return cpu_name;
+        }
         /* Get Installed Applications from windows machine key
          * @return String
          */
@@ -203,6 +227,8 @@ namespace Angelplayer_Client
             lbl_mac.Text = "MAC Address: " + GetMacAddress();
             lbl_user_name.Text = "User Name: " + GetUserName();
             lbl_os_version.Text = "OS version: " + GetOSVersion();
+            lbl_cpu.Text = "Processor: " + GetCPU();
+            lbl_mem.Text = "RAM: " + GetMemory();
         }
 
         public Form1()
@@ -279,6 +305,8 @@ namespace Angelplayer_Client
                 mac = GetMacAddress(),
                 device_name = GetDeviceName(),
                 os = GetOSVersion(),
+                cpu = GetCPU(),
+                mem = GetMemory(),
                 user_name = GetUserName(),
                 apps = GetInstalledApps(),
             }));

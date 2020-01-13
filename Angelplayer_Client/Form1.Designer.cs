@@ -47,11 +47,13 @@ namespace Angelplayer_Client
             this.timer_reconnect = new System.Windows.Forms.Timer(this.components);
             this.btn_unlock = new System.Windows.Forms.Button();
             this.txt_passwd = new System.Windows.Forms.TextBox();
+            this.lbl_cpu = new System.Windows.Forms.Label();
+            this.lbl_mem = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txt_host
             // 
-            this.txt_host.Location = new System.Drawing.Point(70, 159);
+            this.txt_host.Location = new System.Drawing.Point(73, 217);
             this.txt_host.Margin = new System.Windows.Forms.Padding(2);
             this.txt_host.Name = "txt_host";
             this.txt_host.Size = new System.Drawing.Size(76, 20);
@@ -60,7 +62,7 @@ namespace Angelplayer_Client
             // 
             // txt_port
             // 
-            this.txt_port.Location = new System.Drawing.Point(70, 184);
+            this.txt_port.Location = new System.Drawing.Point(73, 242);
             this.txt_port.Margin = new System.Windows.Forms.Padding(2);
             this.txt_port.Name = "txt_port";
             this.txt_port.Size = new System.Drawing.Size(76, 20);
@@ -69,7 +71,7 @@ namespace Angelplayer_Client
             // 
             // btn_save
             // 
-            this.btn_save.Location = new System.Drawing.Point(86, 207);
+            this.btn_save.Location = new System.Drawing.Point(89, 265);
             this.btn_save.Margin = new System.Windows.Forms.Padding(2);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(59, 30);
@@ -81,7 +83,7 @@ namespace Angelplayer_Client
             // lbl_host
             // 
             this.lbl_host.AutoSize = true;
-            this.lbl_host.Location = new System.Drawing.Point(35, 162);
+            this.lbl_host.Location = new System.Drawing.Point(38, 220);
             this.lbl_host.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_host.Name = "lbl_host";
             this.lbl_host.Size = new System.Drawing.Size(32, 13);
@@ -91,7 +93,7 @@ namespace Angelplayer_Client
             // lbl_port
             // 
             this.lbl_port.AutoSize = true;
-            this.lbl_port.Location = new System.Drawing.Point(35, 187);
+            this.lbl_port.Location = new System.Drawing.Point(38, 245);
             this.lbl_port.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_port.Name = "lbl_port";
             this.lbl_port.Size = new System.Drawing.Size(29, 13);
@@ -101,7 +103,7 @@ namespace Angelplayer_Client
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(93, 258);
+            this.label1.Location = new System.Drawing.Point(107, 313);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(181, 13);
@@ -145,7 +147,7 @@ namespace Angelplayer_Client
             // 
             // txt_cid
             // 
-            this.txt_cid.Location = new System.Drawing.Point(70, 136);
+            this.txt_cid.Location = new System.Drawing.Point(73, 194);
             this.txt_cid.Margin = new System.Windows.Forms.Padding(2);
             this.txt_cid.Name = "txt_cid";
             this.txt_cid.Size = new System.Drawing.Size(76, 20);
@@ -154,7 +156,7 @@ namespace Angelplayer_Client
             // lbl_cid
             // 
             this.lbl_cid.AutoSize = true;
-            this.lbl_cid.Location = new System.Drawing.Point(9, 139);
+            this.lbl_cid.Location = new System.Drawing.Point(12, 197);
             this.lbl_cid.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_cid.Name = "lbl_cid";
             this.lbl_cid.Size = new System.Drawing.Size(59, 13);
@@ -188,7 +190,7 @@ namespace Angelplayer_Client
             // 
             // btn_unlock
             // 
-            this.btn_unlock.Location = new System.Drawing.Point(9, 207);
+            this.btn_unlock.Location = new System.Drawing.Point(12, 265);
             this.btn_unlock.Margin = new System.Windows.Forms.Padding(2);
             this.btn_unlock.Name = "btn_unlock";
             this.btn_unlock.Size = new System.Drawing.Size(59, 30);
@@ -199,18 +201,40 @@ namespace Angelplayer_Client
             // 
             // txt_passwd
             // 
-            this.txt_passwd.Location = new System.Drawing.Point(149, 184);
+            this.txt_passwd.Location = new System.Drawing.Point(152, 242);
             this.txt_passwd.Margin = new System.Windows.Forms.Padding(2);
             this.txt_passwd.Name = "txt_passwd";
             this.txt_passwd.Size = new System.Drawing.Size(76, 20);
             this.txt_passwd.TabIndex = 15;
             this.txt_passwd.Visible = false;
             // 
+            // lbl_cpu
+            // 
+            this.lbl_cpu.AutoSize = true;
+            this.lbl_cpu.Location = new System.Drawing.Point(9, 112);
+            this.lbl_cpu.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbl_cpu.Name = "lbl_cpu";
+            this.lbl_cpu.Size = new System.Drawing.Size(41, 13);
+            this.lbl_cpu.TabIndex = 16;
+            this.lbl_cpu.Text = "lbl_cpu";
+            // 
+            // lbl_mem
+            // 
+            this.lbl_mem.AutoSize = true;
+            this.lbl_mem.Location = new System.Drawing.Point(9, 134);
+            this.lbl_mem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbl_mem.Name = "lbl_mem";
+            this.lbl_mem.Size = new System.Drawing.Size(45, 13);
+            this.lbl_mem.TabIndex = 17;
+            this.lbl_mem.Text = "lbl_mem";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(278, 276);
+            this.ClientSize = new System.Drawing.Size(290, 335);
+            this.Controls.Add(this.lbl_mem);
+            this.Controls.Add(this.lbl_cpu);
             this.Controls.Add(this.txt_passwd);
             this.Controls.Add(this.btn_unlock);
             this.Controls.Add(this.lbl_os_version);
@@ -259,6 +283,8 @@ namespace Angelplayer_Client
         private System.Windows.Forms.Timer timer_reconnect;
         private System.Windows.Forms.Button btn_unlock;
         private System.Windows.Forms.TextBox txt_passwd;
+        private System.Windows.Forms.Label lbl_cpu;
+        private System.Windows.Forms.Label lbl_mem;
     }
 }
 
