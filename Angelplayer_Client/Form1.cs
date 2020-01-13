@@ -63,25 +63,32 @@ namespace Angelplayer_Client
                     {
                         try
                         {
-                            output += sk.GetValue("DisplayName").ToString() + ",";
-                            output += sk.GetValue("DisplayVersion").ToString() + ",";
-                            output += sk.GetValue("InstallDate").ToString() + ",";
-                            if (sk.GetValue("InstallSource") == null)
+                            if (sk.GetValue("DisplayName") != null) 
                             {
-                                if (sk.GetValue("InstallLocation") == null)
+                                output += sk.GetValue("DisplayName").ToString() + "|";
+                                output += sk.GetValue("DisplayVersion") == null ? "N/A|" : sk.GetValue("DisplayVersion").ToString() + "|";
+                                output += sk.GetValue("InstallDate") == null ? "N/A|" : sk.GetValue("InstallDate").ToString() + "|";
+                                if (sk.GetValue("InstallSource") == null)
                                 {
-                                    output += "N/A,";
+                                    if (sk.GetValue("InstallLocation") == null)
+                                    {
+                                        output += "N/A|";
+                                    }
+                                    else
+                                    {
+                                        output += sk.GetValue("InstallLocation").ToString() + "|";
+                                    }
                                 }
-                                else {
-                                    output += sk.GetValue("InstallLocation").ToString() + ",";
+                                else
+                                {
+                                    output += sk.GetValue("InstallSource").ToString() + "|";
                                 }
-                            }
-                            else {
-                                output += sk.GetValue("InstallSource").ToString() + ",";
                             }
                         }
                         catch (Exception ex)
-                        { }
+                        {
+                            MessageBox.Show(ex.ToString());
+                        }
                     }
                 }
             }
@@ -244,11 +251,22 @@ namespace Angelplayer_Client
         private void Form1_Load(object sender, EventArgs e)
         {
             InitUI();
-            //start send and auto-reconnect timer
-            timer_send.Start();
-            timer_reconnect.Start();
+            // Create a auto-send timer 
+            System.Timers.Timer timer_auto_send = new System.Timers.Timer(10000);
+            // Hook up the Elapsed event for the timer.
+            timer_auto_send.Elapsed += timer_send_Tick;
+            timer_auto_send.Enabled = true;
+
+            // Create a auto-reconnect timer 
+            System.Timers.Timer timer_auto_reconnect = new System.Timers.Timer(5000);
+            // Hook up the Elapsed event for the timer.
+            timer_auto_reconnect.Elapsed += timer_reconnect_Tick;
+            timer_auto_reconnect.Enabled = true;
+
             //connect to new socket server
             ConnectToSocket();
+  
+
         }
         private static void ShowWindowsMessage(bool flag)
         {

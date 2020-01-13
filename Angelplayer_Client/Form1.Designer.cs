@@ -140,11 +140,6 @@ namespace Angelplayer_Client
             this.lbl_mac.TabIndex = 9;
             this.lbl_mac.Text = "lbl_mac";
             // 
-            // timer_send
-            // 
-            this.timer_send.Interval = 10000;
-            this.timer_send.Tick += new System.EventHandler(this.timer_send_Tick);
-            // 
             // txt_cid
             // 
             this.txt_cid.Location = new System.Drawing.Point(73, 194);
