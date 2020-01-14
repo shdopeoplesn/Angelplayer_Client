@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -47,6 +48,29 @@ namespace Angelplayer_Client
                 cpu_name = obj["Name"].ToString();
             }
             return cpu_name;
+        }
+
+        /* Get CPU Usage
+         * @return String
+         */
+        static PerformanceCounter cpuCounter = new PerformanceCounter(
+            "Processor", "% Processor Time", "_Total");
+        public static string GetCurrentCpuUsage
+        {
+            get
+            {
+                return cpuCounter.NextValue() + "%";
+            }
+        }
+
+        /* Get RAM Usage
+         * @return String
+         */
+        public string GetAvailableRAM()
+        {
+            PerformanceCounter ramCounter;
+            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            return ramCounter.NextValue() + "MB";
         }
         /* Get Installed Applications from windows machine key
          * @return String
@@ -252,7 +276,7 @@ namespace Angelplayer_Client
         {
             InitUI();
             // Create a auto-send timer 
-            System.Timers.Timer timer_auto_send = new System.Timers.Timer(10000);
+            System.Timers.Timer timer_auto_send = new System.Timers.Timer(1000);
             // Hook up the Elapsed event for the timer.
             timer_auto_send.Elapsed += timer_send_Tick;
             timer_auto_send.Enabled = true;
@@ -265,8 +289,6 @@ namespace Angelplayer_Client
 
             //connect to new socket server
             ConnectToSocket();
-  
-
         }
         private static void ShowWindowsMessage(bool flag)
         {
@@ -325,28 +347,28 @@ namespace Angelplayer_Client
                 os = GetOSVersion(),
                 cpu = GetCPU(),
                 mem = GetMemory(),
+                cpu_usage = GetCurrentCpuUsage,
+                mem_remain = GetAvailableRAM(),
                 user_name = GetUserName(),
                 apps = GetInstalledApps(),
             }));
+
             int max_length = 1000;
 
-            ws.SendAsync(StringToBase64("SYN"), completed);
-            Thread.Sleep(50);
+            ws.Send(StringToBase64("SYN"));
             while (comm.Length > 0) {
                 if (comm.Length < max_length)
                 {
-                    ws.SendAsync(comm, completed);
+                    ws.Send(comm);
                     break;
                 }
                 else {
                     int len = comm.Length;
-                    ws.SendAsync(comm.Substring(0, max_length).ToString(), completed);
+                    ws.Send(comm.Substring(0, max_length).ToString());
                     comm = comm.Substring(max_length, len - max_length);
                 }
-                Thread.Sleep(50);
             }
-            Thread.Sleep(50);
-            ws.SendAsync(StringToBase64("ACK"), completed);
+            ws.Send(StringToBase64("ACK"));
 
         }
 
