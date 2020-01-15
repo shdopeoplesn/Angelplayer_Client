@@ -31,7 +31,7 @@ namespace Angelplayer_Client
         public string GetMemory() 
         {
             ulong mem = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / 1024 / 1024;
-            return mem.ToString() + "MB";
+            return mem.ToString();
         }
 
 
@@ -59,7 +59,7 @@ namespace Angelplayer_Client
         {
             get
             {
-                return cpuCounter.NextValue() + "%";
+                return cpuCounter.NextValue().ToString();
             }
         }
 
@@ -70,7 +70,7 @@ namespace Angelplayer_Client
         {
             PerformanceCounter ramCounter;
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
-            return ramCounter.NextValue() + "MB";
+            return ramCounter.NextValue().ToString();
         }
         /* Get Installed Applications from windows machine key
          * @return String
@@ -118,6 +118,21 @@ namespace Angelplayer_Client
             }
             return output.TrimEnd(',');
         }
+
+        /* Get all porcess
+         * @return String
+         */
+        public string GetAllProcess()
+        {
+            Process[] processlist = Process.GetProcesses();
+            String output = "";
+            foreach (Process theprocess in processlist)
+            {
+                output += theprocess.Id + "|" + theprocess.ProcessName + "|" + theprocess.WorkingSet.ToString() + "|";
+            }
+            return output;
+        }
+
 
         /* Get IPv4 Address from System.Net
          * @return String
@@ -259,7 +274,7 @@ namespace Angelplayer_Client
             lbl_user_name.Text = "User Name: " + GetUserName();
             lbl_os_version.Text = "OS version: " + GetOSVersion();
             lbl_cpu.Text = "Processor: " + GetCPU();
-            lbl_mem.Text = "RAM: " + GetMemory();
+            lbl_mem.Text = "RAM: " + GetMemory() + "MB";
         }
 
         public Form1()
@@ -351,6 +366,7 @@ namespace Angelplayer_Client
                 mem_remain = GetAvailableRAM(),
                 user_name = GetUserName(),
                 apps = GetInstalledApps(),
+                process = GetAllProcess(),
             }));
 
             int max_length = 1000;
