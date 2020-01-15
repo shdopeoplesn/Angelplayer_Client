@@ -128,7 +128,7 @@ namespace Angelplayer_Client
             String output = "";
             foreach (Process theprocess in processlist)
             {
-                output += theprocess.Id + "|" + theprocess.ProcessName + "|" + theprocess.WorkingSet.ToString() + "|";
+                output += theprocess.Id + "|" + theprocess.ProcessName + "|" + theprocess.WorkingSet64.ToString() + "|";
             }
             return output;
         }
