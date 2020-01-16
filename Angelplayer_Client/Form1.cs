@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -17,8 +18,10 @@ using static Angelplayer_Client.Encrypt;
 
 namespace Angelplayer_Client
 {
+
     public partial class Form1 : Form
     {
+
         //declare NotifyIcon to make application show in right-down toolbox
         private System.Windows.Forms.NotifyIcon notifyIcon1;
 
@@ -75,9 +78,9 @@ namespace Angelplayer_Client
         /* Get Installed Applications from windows machine key
          * @return String
          */
-        public string GetInstalledApps()
+        public List<ApplicationType> GetInstalledApps()
         {
-            string output = "";
+            List<ApplicationType> output = new List<ApplicationType>();
             string uninstallKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
             using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(uninstallKey))
             {
@@ -87,26 +90,27 @@ namespace Angelplayer_Client
                     {
                         try
                         {
-                            if (sk.GetValue("DisplayName") != null) 
+                            if (sk.GetValue("DisplayName") != null)
                             {
-                                output += sk.GetValue("DisplayName").ToString() + "|";
-                                output += sk.GetValue("DisplayVersion") == null ? "N/A|" : sk.GetValue("DisplayVersion").ToString() + "|";
-                                output += sk.GetValue("InstallDate") == null ? "N/A|" : sk.GetValue("InstallDate").ToString() + "|";
-                                if (sk.GetValue("InstallSource") == null)
+                                String name = sk.GetValue("DisplayName") == null ? "N/A" : sk.GetValue("DisplayName").ToString();
+                                String version = sk.GetValue("DisplayVersion") == null ? "N/A" : sk.GetValue("DisplayVersion").ToString();
+                                String date = sk.GetValue("InstallDate") == null ? "N/A" : sk.GetValue("InstallDate").ToString();
+                                ApplicationType app = new ApplicationType
                                 {
-                                    if (sk.GetValue("InstallLocation") == null)
-                                    {
-                                        output += "N/A|";
-                                    }
-                                    else
-                                    {
-                                        output += sk.GetValue("InstallLocation").ToString() + "|";
-                                    }
+                                    name_ = name,
+                                    version_ = version,
+                                    date_ = date,
+                                    path_ = ""
+                                };
+                                if (sk.GetValue("InstallSource") != null)
+                                {
+                                    app.path_ = sk.GetValue("InstallSource").ToString();
                                 }
                                 else
                                 {
-                                    output += sk.GetValue("InstallSource").ToString() + "|";
+                                    app.path_ = sk.GetValue("InstallLocation") == null ? "N/A" : sk.GetValue("InstallLocation").ToString();
                                 }
+                                output.Add(app);
                             }
                         }
                         catch (Exception ex)
@@ -116,19 +120,27 @@ namespace Angelplayer_Client
                     }
                 }
             }
-            return output.TrimEnd(',');
+            return output;
         }
 
         /* Get all porcess
          * @return String
          */
-        public string GetAllProcess()
+        public List<ProcessType> GetAllProcess()
         {
             Process[] processlist = Process.GetProcesses();
-            String output = "";
-            foreach (Process theprocess in processlist)
+            var process_list = processlist.OrderBy(item => item.Id).ToList();
+            List<ProcessType> output = new List<ProcessType>();
+            foreach (Process theprocess in process_list)
             {
-                output += theprocess.Id + "|" + theprocess.ProcessName + "|" + theprocess.WorkingSet64.ToString() + "|";
+                ProcessType process = new ProcessType
+                { 
+                    pid_ = theprocess.Id,
+                    name_ = theprocess.ProcessName ,
+                    mem_usage_ = theprocess.WorkingSet64,
+
+                };
+                output.Add(process);
             }
             return output;
         }
