@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Management;
 using System.Net;
@@ -82,6 +83,7 @@ namespace Angelplayer_Client
         {
             List<ApplicationType> output = new List<ApplicationType>();
             string uninstallKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+            // search in: LocalMachine_32
             using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(uninstallKey))
             {
                 foreach (string skName in rk.GetSubKeyNames())
@@ -120,6 +122,7 @@ namespace Angelplayer_Client
                     }
                 }
             }
+
             return output;
         }
 
@@ -219,16 +222,26 @@ namespace Angelplayer_Client
             return r;
         }
 
-        /* turn string to base64 encoding
+        /* compress string to gzip formate based base64 encoding
          * @return String
          */
-        private string StringToBase64(string srcText)
-        {
-            Byte[] bytesEncode = System.Text.Encoding.UTF8.GetBytes(srcText);
-            string dstText = Convert.ToBase64String(bytesEncode);
-            return dstText;
-        }
 
+        public static string CompressString(string text)
+        {
+            if (string.IsNullOrEmpty(text)) { return text; }
+
+            byte[] buffer = Encoding.UTF8.GetBytes(text);
+
+            using (var outStream = new MemoryStream())
+            using (var zip = new GZipStream(outStream, CompressionMode.Compress))
+            {
+                zip.Write(buffer, 0, buffer.Length);
+                zip.Close();
+
+                string compressedBase64 = Convert.ToBase64String(outStream.ToArray());
+                return compressedBase64;
+            }
+        }
 
         public void ConnectToSocket(){
             try
@@ -364,7 +377,7 @@ namespace Angelplayer_Client
             var ws = WS.client;
             Action<bool> completed = ShowWindowsMessage;
             String comm = "";
-            comm = StringToBase64(JsonConvert.SerializeObject(new
+            comm = CompressString(JsonConvert.SerializeObject(new
             {
                 code = 200,
                 cid = txt_cid.Text,
@@ -380,10 +393,9 @@ namespace Angelplayer_Client
                 apps = GetInstalledApps(),
                 process = GetAllProcess(),
             }));
+            int max_length = 2000;
 
-            int max_length = 1000;
-
-            ws.Send(StringToBase64("SYN"));
+            ws.Send(CompressString("SYN"));
             while (comm.Length > 0) {
                 if (comm.Length < max_length)
                 {
@@ -396,7 +408,7 @@ namespace Angelplayer_Client
                     comm = comm.Substring(max_length, len - max_length);
                 }
             }
-            ws.Send(StringToBase64("ACK"));
+            ws.Send(CompressString("ACK"));
 
         }
 
