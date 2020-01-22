@@ -34,8 +34,15 @@ namespace Angelplayer_Client
          */
         public string GetMemory() 
         {
-            ulong mem = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / 1024 / 1024;
-            return mem.ToString();
+            try
+            {
+                ulong mem = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / 1024 / 1024;
+                return mem.ToString();
+            }
+            catch
+            {
+                return "0";
+            }
         }
 
 
@@ -44,14 +51,21 @@ namespace Angelplayer_Client
          */
         public string GetCPU()
         {
-            String cpu_name = "";
-            ManagementObjectSearcher myProcessorObject = new ManagementObjectSearcher("select * from Win32_Processor");
-
-            foreach (ManagementObject obj in myProcessorObject.Get())
+            try
             {
-                cpu_name = obj["Name"].ToString();
+                String cpu_name = "";
+                ManagementObjectSearcher myProcessorObject = new ManagementObjectSearcher("select * from Win32_Processor");
+
+                foreach (ManagementObject obj in myProcessorObject.Get())
+                {
+                    cpu_name = obj["Name"].ToString();
+                }
+                return cpu_name;
             }
-            return cpu_name;
+            catch 
+            {
+                return "N/A";
+            }
         }
 
         /* Get CPU Usage
@@ -72,80 +86,119 @@ namespace Angelplayer_Client
          */
         public string GetAvailableRAM()
         {
-            PerformanceCounter ramCounter;
-            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
-            return ramCounter.NextValue().ToString();
+            try
+            {
+                PerformanceCounter ramCounter;
+                ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+                return ramCounter.NextValue().ToString();
+            }
+            catch 
+            {
+                return "0";
+            }
         }
         /* Get Installed Applications from windows machine key
-         * @return String
+         * @return ApplicationType List
          */
         public List<ApplicationType> GetInstalledApps()
         {
-            List<ApplicationType> output = new List<ApplicationType>();
-            string uninstallKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-            // search in: LocalMachine_32
-            using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(uninstallKey))
+            try
             {
-                foreach (string skName in rk.GetSubKeyNames())
+                List<ApplicationType> output = new List<ApplicationType>();
+                string uninstallKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+                // search in: LocalMachine_32
+                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(uninstallKey))
                 {
-                    using (RegistryKey sk = rk.OpenSubKey(skName))
+                    foreach (string skName in rk.GetSubKeyNames())
                     {
-                        try
+                        using (RegistryKey sk = rk.OpenSubKey(skName))
                         {
-                            if (sk.GetValue("DisplayName") != null)
+                            try
                             {
-                                String name = sk.GetValue("DisplayName") == null ? "N/A" : sk.GetValue("DisplayName").ToString();
-                                String version = sk.GetValue("DisplayVersion") == null ? "N/A" : sk.GetValue("DisplayVersion").ToString();
-                                String date = sk.GetValue("InstallDate") == null ? "N/A" : sk.GetValue("InstallDate").ToString();
-                                ApplicationType app = new ApplicationType
+                                if (sk.GetValue("DisplayName") != null)
                                 {
-                                    name_ = name,
-                                    version_ = version,
-                                    date_ = date,
-                                    path_ = ""
-                                };
-                                if (sk.GetValue("InstallSource") != null)
-                                {
-                                    app.path_ = sk.GetValue("InstallSource").ToString();
+                                    String name = sk.GetValue("DisplayName") == null ? "N/A" : sk.GetValue("DisplayName").ToString();
+                                    String version = sk.GetValue("DisplayVersion") == null ? "N/A" : sk.GetValue("DisplayVersion").ToString();
+                                    String date = sk.GetValue("InstallDate") == null ? "N/A" : sk.GetValue("InstallDate").ToString();
+                                    ApplicationType app = new ApplicationType
+                                    {
+                                        name_ = name,
+                                        version_ = version,
+                                        date_ = date,
+                                        path_ = ""
+                                    };
+                                    if (sk.GetValue("InstallSource") != null)
+                                    {
+                                        app.path_ = sk.GetValue("InstallSource").ToString();
+                                    }
+                                    else
+                                    {
+                                        app.path_ = sk.GetValue("InstallLocation") == null ? "N/A" : sk.GetValue("InstallLocation").ToString();
+                                    }
+                                    output.Add(app);
                                 }
-                                else
-                                {
-                                    app.path_ = sk.GetValue("InstallLocation") == null ? "N/A" : sk.GetValue("InstallLocation").ToString();
-                                }
-                                output.Add(app);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.ToString());
+                            catch
+                            {
+                                //Do nothing
+                            }
                         }
                     }
                 }
+                return output;
+            }catch 
+            {
+                List<ApplicationType> output = new List<ApplicationType>();
+                ApplicationType app = new ApplicationType
+                {
+                    name_ = "N/A",
+                    version_ = "N/A",
+                    date_ = "N/A",
+                    path_ = "N/A"
+                };
+                output.Add(app);
+                return output;
             }
+            
 
-            return output;
+            
         }
 
         /* Get all porcess
-         * @return String
+         * @return ProcessType List
          */
         public List<ProcessType> GetAllProcess()
         {
-            Process[] processlist = Process.GetProcesses();
-            var process_list = processlist.OrderBy(item => item.Id).ToList();
-            List<ProcessType> output = new List<ProcessType>();
-            foreach (Process theprocess in process_list)
+            try
+            {
+                Process[] processlist = Process.GetProcesses();
+                var process_list = processlist.OrderBy(item => item.Id).ToList();
+                List<ProcessType> output = new List<ProcessType>();
+                foreach (Process theprocess in process_list)
+                {
+                    ProcessType process = new ProcessType
+                    {
+                        pid_ = theprocess.Id,
+                        name_ = theprocess.ProcessName,
+                        mem_usage_ = theprocess.WorkingSet64,
+
+                    };
+                    output.Add(process);
+                }
+                return output;
+            }
+            catch 
             {
                 ProcessType process = new ProcessType
-                { 
-                    pid_ = theprocess.Id,
-                    name_ = theprocess.ProcessName ,
-                    mem_usage_ = theprocess.WorkingSet64,
-
+                {
+                    pid_ = -1,
+                    name_ = "N/A",
+                    mem_usage_ = -1,
                 };
+                List<ProcessType> output = new List<ProcessType>();
                 output.Add(process);
+                return output;
             }
-            return output;
         }
 
 
@@ -154,33 +207,48 @@ namespace Angelplayer_Client
          */
         public static string GetIP4Address()
         {
-            string IP4Address = String.Empty;
-            foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
+            try
             {
-                if (IPA.AddressFamily.ToString() == "InterNetwork")
+                string IP4Address = String.Empty;
+                foreach (IPAddress IPA in Dns.GetHostAddresses(Dns.GetHostName()))
                 {
-                    IP4Address += IPA.ToString() + ",";
+                    if (IPA.AddressFamily.ToString() == "InterNetwork")
+                    {
+                        IP4Address += IPA.ToString() + ",";
+                    }
                 }
+                return IP4Address.TrimEnd(',');
             }
-            return IP4Address.TrimEnd(',');
+            catch 
+            {
+                return "N/A";
+            }
+            
         }
 
         /* Get IPv4 Address from System.Net
          * @return String
          */
         public static string GetMacAddress() {
-            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-
-            string MACAddress = String.Empty;
-            foreach (var nic in nics)
+            try
             {
-                //Catch Ethernet MAC only
-                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+
+                string MACAddress = String.Empty;
+                foreach (var nic in nics)
                 {
-                    MACAddress += nic.GetPhysicalAddress().ToString() + ",";
-                }    
+                    //Catch Ethernet MAC only
+                    if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                    {
+                        MACAddress += nic.GetPhysicalAddress().ToString() + ",";
+                    }
+                }
+                return MACAddress.TrimEnd(',');
             }
-            return MACAddress.TrimEnd(','); ;
+            catch
+            {
+                return "N/A";
+            }
         }
 
 
@@ -189,7 +257,14 @@ namespace Angelplayer_Client
          */
         public static string GetDeviceName()
         {
-            return Environment.MachineName;
+            try
+            {
+                return Environment.MachineName;
+            }
+            catch 
+            {
+                return "N/A";
+            }
         }
 
         /* Get User Name
@@ -197,7 +272,14 @@ namespace Angelplayer_Client
          */
         public static string GetUserName()
         {
-            return Environment.UserName;
+            try
+            {
+                return Environment.UserName;
+            }
+            catch
+            {
+                return "N/A";
+            }
         }
 
         /* Get OS Info.
@@ -205,21 +287,28 @@ namespace Angelplayer_Client
          */
         public static string GetOSVersion()
         {
-            string r = "";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem"))
+            try
             {
-                ManagementObjectCollection information = searcher.Get();
-                if (information != null)
+                string r = "";
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem"))
                 {
-                    foreach (ManagementObject obj in information)
+                    ManagementObjectCollection information = searcher.Get();
+                    if (information != null)
                     {
-                        r = obj["Caption"].ToString() + " - " + obj["OSArchitecture"].ToString();
+                        foreach (ManagementObject obj in information)
+                        {
+                            r = obj["Caption"].ToString() + " - " + obj["OSArchitecture"].ToString();
+                        }
                     }
+                    r = r.Replace("NT 5.1.2600", "XP");
+                    r = r.Replace("NT 5.2.3790", "Server 2003");
                 }
-                r = r.Replace("NT 5.1.2600", "XP");
-                r = r.Replace("NT 5.2.3790", "Server 2003");
+                return r;
             }
-            return r;
+            catch
+            {
+                return "unknown OS";
+            }
         }
 
         /* compress string to gzip formate based base64 encoding
@@ -374,42 +463,52 @@ namespace Angelplayer_Client
 
         private void timer_send_Tick(object sender, EventArgs e)
         {
-            var ws = WS.client;
-            Action<bool> completed = ShowWindowsMessage;
-            String comm = "";
-            comm = CompressString(JsonConvert.SerializeObject(new
-            {
-                code = 200,
-                cid = txt_cid.Text,
-                ipv4 = GetIP4Address(),
-                mac = GetMacAddress(),
-                device_name = GetDeviceName(),
-                os = GetOSVersion(),
-                cpu = GetCPU(),
-                mem = GetMemory(),
-                cpu_usage = GetCurrentCpuUsage,
-                mem_remain = GetAvailableRAM(),
-                user_name = GetUserName(),
-                apps = GetInstalledApps(),
-                process = GetAllProcess(),
-            }));
-            int max_length = 2000;
-
-            ws.Send(CompressString("SYN"));
-            while (comm.Length > 0) {
-                if (comm.Length < max_length)
+            //send data when textboxes saved only
+            if (btn_unlock.Enabled == true && btn_save.Enabled == false) {
+                var ws = WS.client;
+                String comm = "";
+                try
                 {
-                    ws.Send(comm);
-                    break;
+                    comm = CompressString(JsonConvert.SerializeObject(new
+                    {
+                        code = 200,
+                        cid = txt_cid.Text,
+                        ipv4 = GetIP4Address(),
+                        mac = GetMacAddress(),
+                        device_name = GetDeviceName(),
+                        os = GetOSVersion(),
+                        cpu = GetCPU(),
+                        mem = GetMemory(),
+                        cpu_usage = GetCurrentCpuUsage,
+                        mem_remain = GetAvailableRAM(),
+                        user_name = GetUserName(),
+                        apps = GetInstalledApps(),
+                        process = GetAllProcess(),
+                    }));
+                    int max_length = 2000;
+
+                    ws.Send(CompressString("SYN"));
+                    while (comm.Length > 0)
+                    {
+                        if (comm.Length < max_length)
+                        {
+                            ws.Send(comm);
+                            break;
+                        }
+                        else
+                        {
+                            int len = comm.Length;
+                            ws.Send(comm.Substring(0, max_length).ToString());
+                            comm = comm.Substring(max_length, len - max_length);
+                        }
+                    }
+                    ws.Send(CompressString("ACK"));
                 }
-                else {
-                    int len = comm.Length;
-                    ws.Send(comm.Substring(0, max_length).ToString());
-                    comm = comm.Substring(max_length, len - max_length);
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
                 }
             }
-            ws.Send(CompressString("ACK"));
-
         }
 
         private void timer_reconnect_Tick(object sender, EventArgs e)
