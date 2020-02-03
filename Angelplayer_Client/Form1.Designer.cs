@@ -49,6 +49,8 @@ namespace Angelplayer_Client
             this.txt_passwd = new System.Windows.Forms.TextBox();
             this.lbl_cpu = new System.Windows.Forms.Label();
             this.lbl_mem = new System.Windows.Forms.Label();
+            this.notifyIcon2 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.btn_update = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txt_host
@@ -216,11 +218,27 @@ namespace Angelplayer_Client
             this.lbl_mem.TabIndex = 17;
             this.lbl_mem.Text = "lbl_mem";
             // 
+            // notifyIcon2
+            // 
+            this.notifyIcon2.Text = "notifyIcon2";
+            this.notifyIcon2.Visible = true;
+            // 
+            // btn_update
+            // 
+            this.btn_update.Location = new System.Drawing.Point(226, 326);
+            this.btn_update.Name = "btn_update";
+            this.btn_update.Size = new System.Drawing.Size(77, 37);
+            this.btn_update.TabIndex = 18;
+            this.btn_update.Text = "update";
+            this.btn_update.UseVisualStyleBackColor = true;
+            this.btn_update.Click += new System.EventHandler(this.btn_update_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(387, 412);
+            this.Controls.Add(this.btn_update);
             this.Controls.Add(this.lbl_mem);
             this.Controls.Add(this.lbl_cpu);
             this.Controls.Add(this.txt_passwd);
@@ -273,6 +291,8 @@ namespace Angelplayer_Client
         private System.Windows.Forms.TextBox txt_passwd;
         private System.Windows.Forms.Label lbl_cpu;
         private System.Windows.Forms.Label lbl_mem;
+        private System.Windows.Forms.NotifyIcon notifyIcon2;
+        private System.Windows.Forms.Button btn_update;
     }
 }
 

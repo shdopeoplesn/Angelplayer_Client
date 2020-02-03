@@ -317,19 +317,9 @@ namespace Angelplayer_Client
 
         public static string CompressString(string text)
         {
-            if (string.IsNullOrEmpty(text)) { return text; }
-
-            byte[] buffer = Encoding.UTF8.GetBytes(text);
-
-            using (var outStream = new MemoryStream())
-            using (var zip = new GZipStream(outStream, CompressionMode.Compress))
-            {
-                zip.Write(buffer, 0, buffer.Length);
-                zip.Close();
-
-                string compressedBase64 = Convert.ToBase64String(outStream.ToArray());
-                return compressedBase64;
-            }
+            Byte[] text_bytes = System.Text.Encoding.UTF8.GetBytes(text);
+            string compressedBase64 = Convert.ToBase64String(text_bytes);
+            return compressedBase64;
         }
 
         public void ConnectToSocket(){
@@ -523,7 +513,7 @@ namespace Angelplayer_Client
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            MessageBox.Show("This Program can not be closed!");
+            //MessageBox.Show("This Program can not be closed!");
             e.Cancel = true;
         }
 
@@ -558,6 +548,28 @@ namespace Angelplayer_Client
             txt_host.Enabled = true;
             txt_port.Enabled = true;
             btn_unlock.Enabled = false;
+        }
+
+        public bool UpdateClient(String port,String filename)
+        {
+            try
+            {
+                var client = new WebClient();
+                String update_url = "http://" + txt_host.Text + ":" + port + "/" + filename;
+                client.DownloadFile(update_url, "Angelplayer_Client_2.exe");
+                Process.Start("update.bat", "");
+                return true;
+            }
+            catch
+            {
+                MessageBox.Show("update failed");
+                return false;
+            }
+        }
+
+        private void btn_update_Click(object sender, EventArgs e)
+        {
+            UpdateClient("7780","Angelplayer_Client.exe");
         }
     }
 }
