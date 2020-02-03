@@ -475,7 +475,7 @@ namespace Angelplayer_Client
                         apps = GetInstalledApps(),
                         process = GetAllProcess(),
                     }));
-                    int max_length = 2000;
+                    int max_length = 500;
 
                     ws.Send(CompressString("SYN"));
                     while (comm.Length > 0)
