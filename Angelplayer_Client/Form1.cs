@@ -18,16 +18,32 @@ using WebSocketSharp;
 using static Angelplayer_Client.Encrypt;
 
 namespace Angelplayer_Client
-{
-
+{  
     public partial class Form1 : Form
     {
-
         //declare NotifyIcon to make application show in right-down toolbox
         private System.Windows.Forms.NotifyIcon notifyIcon1;
 
+        //data save
         private const string FILE_NAME = "saves.dat";
         private const string FILE_KEY = "tachibana_kanade_maji_tenshi";
+
+        //End self process When system logoff/shutdown/reboot
+        private static int WM_QUERYENDSESSION = 0x11;
+        protected override void WndProc(ref System.Windows.Forms.Message m)
+        {
+            //windows logoff/shutdown/reboot detected.
+            if (m.Msg == WM_QUERYENDSESSION)
+            {
+                //MessageBox.Show("this is a logoff, shutdown, or reboot");
+                Process.GetCurrentProcess().Kill();
+            }
+
+            // If this is WM_QUERYENDSESSION, the closing event should be  
+            // raised in the base WndProc.  
+            base.WndProc(ref m);
+
+        } //WndProc
 
         /* Get Memory size
          * @return String
