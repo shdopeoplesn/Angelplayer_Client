@@ -11,6 +11,7 @@ using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WebSocketSharp;
 using static Angelplayer_Client.Encrypt;
@@ -382,24 +383,27 @@ namespace Angelplayer_Client
             return compressedBase64;
         }
 
-        public void ConnectToSocket(){
+        public async Task ConnectToSocket(){
             try
             {
-                WS.client.Close();
-                WS.client = new WebSocket("ws://" + txt_host.Text + ":" + txt_port.Text);
-                WS.client.Connect();
-                WS.client.OnMessage += (sender1, e1) =>
+                await Task.Run(() =>
                 {
-                    //MessageBox.Show("server says: " + e1.Data);
-                    dynamic data = JsonConvert.DeserializeObject(e1.Data);
-                    if (data.message.ToString() == "updateinfo")
+                    WS.client.Close();
+                    WS.client = new WebSocket("ws://" + txt_host.Text + ":" + txt_port.Text);
+                    WS.client.Connect();
+                    WS.client.OnMessage += (sender1, e1) =>
                     {
-                        if(data.version.ToString() != LOCAL_VERSION && data.force_update == true)
+                        //MessageBox.Show("server says: " + e1.Data);
+                        dynamic data = JsonConvert.DeserializeObject(e1.Data);
+                        if (data.message.ToString() == "updateinfo")
                         {
-                            //UpdateClient(data.url.ToString());
+                            if (data.version.ToString() != LOCAL_VERSION && data.force_update == true)
+                            {
+                                //UpdateClient(data.url.ToString());
+                            }
                         }
-                    }
-                };
+                    };
+                });
             }
             catch (Exception ex)
             {
@@ -525,7 +529,7 @@ namespace Angelplayer_Client
         private void timer_send_Tick(object sender, EventArgs e)
         {
             //send data when textboxes saved only
-            if (btn_unlock.Enabled == true && btn_save.Enabled == false) {
+            if (btn_unlock.Enabled == true && btn_save.Enabled == false && WS.client.ReadyState.ToString() == "Open") {
                 var ws = WS.client;
                 String comm = "";
                 try
@@ -576,7 +580,10 @@ namespace Angelplayer_Client
 
         private void timer_reconnect_Tick(object sender, EventArgs e)
         {
-            WS.client.Connect();
+            if(WS.client.ReadyState.ToString() == "Closed") 
+            {
+                WS.client.Connect();
+            }
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
