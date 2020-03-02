@@ -26,4 +26,14 @@ namespace Angelplayer_Client
         public string date_ { get; set; }         //app install date
         public string path_ { get; set; }          //app install path
     }
+
+    public class DisksType
+    {
+        public string name_ { get; set; }         //Disk name
+        public string label_ { get; set; }      //Disk Label
+        public string type_ { get; set; }         //Disk type
+        public string format_ { get; set; }          //Disk data format
+        public string size_ { get; set; }          //Disk total Size
+        public string remain_ { get; set; }          //Disk Avaliable Size
+    }
 }

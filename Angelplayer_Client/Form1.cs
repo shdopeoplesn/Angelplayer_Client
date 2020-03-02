@@ -6,13 +6,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using WebSocketSharp;
 using static Angelplayer_Client.Encrypt;
@@ -24,12 +22,15 @@ namespace Angelplayer_Client
         //declare NotifyIcon to make application show in right-down toolbox
         private System.Windows.Forms.NotifyIcon notifyIcon1;
 
+        //version
+        public const string LOCAL_VERSION = "0.2.4";
         //data save
         private const string FILE_NAME = "saves.dat";
         private const string FILE_KEY = "tachibana_kanade_maji_tenshi";
 
         //End self process When system logoff/shutdown/reboot
         private static int WM_QUERYENDSESSION = 0x11;
+
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
             //windows logoff/shutdown/reboot detected.
@@ -38,13 +39,55 @@ namespace Angelplayer_Client
                 //MessageBox.Show("this is a logoff, shutdown, or reboot");
                 Process.GetCurrentProcess().Kill();
             }
-
             // If this is WM_QUERYENDSESSION, the closing event should be  
             // raised in the base WndProc.  
             base.WndProc(ref m);
 
         } //WndProc
 
+        /* Get Disks size
+         * @return String
+         */
+        private List<DisksType> GetDisksSize()
+        {
+            List<DisksType> output = new List<DisksType>();
+            //取得所有磁碟機的DriveInfo類別
+            DriveInfo[] ListDrivesInfo = DriveInfo.GetDrives();
+            try
+            {
+                foreach (DriveInfo vListDrivesInfo in ListDrivesInfo)
+                {
+                    //使用IsReady屬性判斷裝置是否就緒
+                    if (vListDrivesInfo.IsReady)
+                    {
+                        DisksType disk = new DisksType
+                        {
+                            name_ = vListDrivesInfo.Name,
+                            label_ = vListDrivesInfo.VolumeLabel,
+                            type_ = vListDrivesInfo.DriveType.ToString(),
+                            format_ = vListDrivesInfo.DriveFormat,
+                            size_= vListDrivesInfo.TotalSize.ToString(),
+                            remain_ = vListDrivesInfo.AvailableFreeSpace.ToString()
+                        };
+                        output.Add(disk);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DisksType disk = new DisksType
+                {
+                    name_ = "N/A",
+                    label_ = "N/A",
+                    type_ = "N/A",
+                    format_ = "N/A",
+                    size_ = "N/A",
+                    remain_ = "N/A"
+                };
+                output.Add(disk);
+            }
+            return output;
+        }
         /* Get Memory size
          * @return String
          */
@@ -245,7 +288,8 @@ namespace Angelplayer_Client
         /* Get IPv4 Address from System.Net
          * @return String
          */
-        public static string GetMacAddress() {
+        public string GetMacAddress() {
+            if (lbl_mac.Text != "N/A") return lbl_mac.Text;
             try
             {
                 NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
@@ -345,7 +389,17 @@ namespace Angelplayer_Client
                 WS.client = new WebSocket("ws://" + txt_host.Text + ":" + txt_port.Text);
                 WS.client.Connect();
                 WS.client.OnMessage += (sender1, e1) =>
-                    MessageBox.Show("server says: " + e1.Data);
+                {
+                    //MessageBox.Show("server says: " + e1.Data);
+                    dynamic data = JsonConvert.DeserializeObject(e1.Data);
+                    if (data.message.ToString() == "updateinfo")
+                    {
+                        if(data.version.ToString() != LOCAL_VERSION && data.force_update == true)
+                        {
+                            //UpdateClient(data.url.ToString());
+                        }
+                    }
+                };
             }
             catch (Exception ex)
             {
@@ -390,11 +444,12 @@ namespace Angelplayer_Client
             //initialize all lbels to print device info.
             lbl_ip.Text = "Local IP: " + GetIP4Address();
             lbl_device_name.Text = "Device Name: " + GetDeviceName();
-            lbl_mac.Text = "MAC Address: " + GetMacAddress();
+            lbl_mac.Text = GetMacAddress();
             lbl_user_name.Text = "User Name: " + GetUserName();
             lbl_os_version.Text = "OS version: " + GetOSVersion();
             lbl_cpu.Text = "Processor: " + GetCPU();
             lbl_mem.Text = "RAM: " + GetMemory() + "MB";
+            lbl_version.Text = "AngelPlayer Control System ver. " + LOCAL_VERSION;
         }
 
         public Form1()
@@ -490,8 +545,10 @@ namespace Angelplayer_Client
                         user_name = GetUserName(),
                         apps = GetInstalledApps(),
                         process = GetAllProcess(),
+                        disks = GetDisksSize()
                     }));
-                    int max_length = 500;
+
+                    int max_length = 512;
 
                     ws.Send(CompressString("SYN"));
                     while (comm.Length > 0)
@@ -566,12 +623,15 @@ namespace Angelplayer_Client
             btn_unlock.Enabled = false;
         }
 
-        public bool UpdateClient(String port,String filename)
+        public bool UpdateClient(String update_url)
         {
             try
             {
                 var client = new WebClient();
-                String update_url = "http://" + txt_host.Text + ":" + port + "/" + filename;
+                if (File.Exists(@"Angelplayer_Client_2.exe"))
+                {
+                    File.Delete(@"Angelplayer_Client_2.exe");
+                }
                 client.DownloadFile(update_url, "Angelplayer_Client_2.exe");
                 Process.Start("update.bat", "");
                 return true;
@@ -583,9 +643,9 @@ namespace Angelplayer_Client
             }
         }
 
-        private void btn_update_Click(object sender, EventArgs e)
+        private void timer_check_device_Tick(object sender, EventArgs e)
         {
-            UpdateClient("7780","Angelplayer_Client.exe");
+            //MessageBox.Show(GetDisksSize()[0].name_.ToString());
         }
     }
 }
