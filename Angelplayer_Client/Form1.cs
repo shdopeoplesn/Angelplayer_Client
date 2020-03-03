@@ -540,12 +540,11 @@ namespace Angelplayer_Client
                 Console.WriteLine(DateTime.Now + " timer try to send,but sender locked.");
                 return;
             }
+            // wait for timer process to stop
+            Monitor.Enter(TimerSenderLock);
+
             //send data when textboxes saved and websocket opened only
             if (btn_unlock.Enabled == true && btn_save.Enabled == false && WS.client.ReadyState.ToString() == "Open") {
-                // wait for timer process to stop
-                Monitor.Enter(TimerSenderLock);
-                Console.WriteLine(DateTime.Now + " Now sender was locked~");
-
                 var ws = WS.client;
                 String comm = "";
                 try
@@ -593,12 +592,9 @@ namespace Angelplayer_Client
                 {
                     Console.WriteLine(ex.ToString());
                 }
-                finally
-                {
-                    //sender was done,wait elapsed timer next toggle
-                    Monitor.Exit(TimerSenderLock);
-                }
             }
+            //sender was done,wait elapsed timer next toggle
+            Monitor.Exit(TimerSenderLock);
         }
 
         private void timer_reconnect_Tick(object sender, EventArgs e)
