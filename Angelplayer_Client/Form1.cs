@@ -11,6 +11,7 @@ using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WebSocketSharp;
@@ -470,7 +471,7 @@ namespace Angelplayer_Client
         {
             InitUI();
             // Create a auto-send timer 
-            System.Timers.Timer timer_auto_send = new System.Timers.Timer(1000);
+            System.Timers.Timer timer_auto_send = new System.Timers.Timer(3000);
             // Hook up the Elapsed event for the timer.
             timer_auto_send.Elapsed += timer_send_Tick;
             timer_auto_send.Enabled = true;
@@ -486,6 +487,7 @@ namespace Angelplayer_Client
 
             //Hide Form and let notifyIcon visible(small icon in right bottom)
             this.WindowState = FormWindowState.Minimized;
+            this.Visible = false;
         }
         private static void ShowWindowsMessage(bool flag)
         {
@@ -529,10 +531,21 @@ namespace Angelplayer_Client
             btn_unlock.Enabled = true;
         }
 
+        private object TimerSenderLock = new object();
         private void timer_send_Tick(object sender, EventArgs e)
         {
-            //send data when textboxes saved only
+            if (!Monitor.TryEnter(TimerSenderLock))
+            {
+                // sender was locked,do not send data again.
+                Console.WriteLine(DateTime.Now + " timer try to send,but sender locked.");
+                return;
+            }
+            //send data when textboxes saved and websocket opened only
             if (btn_unlock.Enabled == true && btn_save.Enabled == false && WS.client.ReadyState.ToString() == "Open") {
+                // wait for timer process to stop
+                Monitor.Enter(TimerSenderLock);
+                Console.WriteLine(DateTime.Now + " Now sender was locked~");
+
                 var ws = WS.client;
                 String comm = "";
                 try
@@ -573,10 +586,17 @@ namespace Angelplayer_Client
                         }
                     }
                     ws.Send(CompressString("ACK"));
+                    Console.WriteLine(DateTime.Now + " data sent to server!");
+                    Monitor.Exit(TimerSenderLock);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    Console.WriteLine(ex.ToString());
+                }
+                finally
+                {
+                    //sender was done,wait elapsed timer next toggle
+                    Monitor.Exit(TimerSenderLock);
                 }
             }
         }

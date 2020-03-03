@@ -105,7 +105,7 @@ namespace Angelplayer_Client
             // lbl_version
             // 
             this.lbl_version.AutoSize = true;
-            this.lbl_version.Location = new System.Drawing.Point(181, 343);
+            this.lbl_version.Location = new System.Drawing.Point(284, 350);
             this.lbl_version.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_version.Name = "lbl_version";
             this.lbl_version.Size = new System.Drawing.Size(181, 13);
