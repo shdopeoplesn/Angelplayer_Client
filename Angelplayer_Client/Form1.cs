@@ -483,6 +483,9 @@ namespace Angelplayer_Client
 
             //connect to new socket server
             ConnectToSocket();
+
+            //Hide Form and let notifyIcon visible(small icon in right bottom)
+            this.WindowState = FormWindowState.Minimized;
         }
         private static void ShowWindowsMessage(bool flag)
         {
@@ -648,11 +651,6 @@ namespace Angelplayer_Client
                 MessageBox.Show("update failed");
                 return false;
             }
-        }
-
-        private void timer_check_device_Tick(object sender, EventArgs e)
-        {
-            //MessageBox.Show(GetDisksSize()[0].name_.ToString());
         }
     }
 }
