@@ -39,7 +39,7 @@ namespace Angelplayer_Client
             this.lbl_ip = new System.Windows.Forms.Label();
             this.lbl_device_name = new System.Windows.Forms.Label();
             this.lbl_mac = new System.Windows.Forms.Label();
-            this.timer_send = new System.Windows.Forms.Timer(this.components);
+            this.timer_hide = new System.Windows.Forms.Timer(this.components);
             this.txt_cid = new System.Windows.Forms.TextBox();
             this.lbl_cid = new System.Windows.Forms.Label();
             this.lbl_user_name = new System.Windows.Forms.Label();
@@ -142,9 +142,10 @@ namespace Angelplayer_Client
             this.lbl_mac.TabIndex = 9;
             this.lbl_mac.Text = "N/A";
             // 
-            // timer_send
+            // timer_hide
             // 
-            this.timer_send.Interval = 5000;
+            this.timer_hide.Interval = 1;
+            this.timer_hide.Tick += new System.EventHandler(this.timer_hide_Tick);
             // 
             // txt_cid
             // 
@@ -293,7 +294,7 @@ namespace Angelplayer_Client
         private System.Windows.Forms.Label lbl_ip;
         private System.Windows.Forms.Label lbl_device_name;
         private System.Windows.Forms.Label lbl_mac;
-        private System.Windows.Forms.Timer timer_send;
+        private System.Windows.Forms.Timer timer_hide;
         private System.Windows.Forms.TextBox txt_cid;
         private System.Windows.Forms.Label lbl_cid;
         private System.Windows.Forms.Label lbl_user_name;

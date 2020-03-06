@@ -486,8 +486,7 @@ namespace Angelplayer_Client
             ConnectToSocket();
 
             //Hide Form and let notifyIcon visible(small icon in right bottom)
-            this.WindowState = FormWindowState.Minimized;
-            this.Visible = false;
+            timer_hide.Enabled = true;
         }
         private static void ShowWindowsMessage(bool flag)
         {
@@ -667,6 +666,13 @@ namespace Angelplayer_Client
                 MessageBox.Show("update failed");
                 return false;
             }
+        }
+
+        private void timer_hide_Tick(object sender, EventArgs e)
+        {
+            this.Hide();
+            this.notifyIcon1.Visible = true;
+            timer_hide.Enabled = false;
         }
     }
 }
