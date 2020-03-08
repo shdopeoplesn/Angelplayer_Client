@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,16 @@ namespace Angelplayer_Client
     public class WS
     {
         public static WebSocket client = new WebSocket("ws://127.0.0.1:7779");
+    }
+
+    public class SystemPerformanceCounter 
+    {
+        //disks info
+        public static PerformanceCounter diskCounter = new PerformanceCounter("LogicalDisk", "% Disk Time", "_Total");
+        public static float diskMaxCounter = 1;
+
+        //cpu info
+        public static PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
     }
 
     public class ProcessType

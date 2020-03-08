@@ -47,6 +47,29 @@ namespace Angelplayer_Client
 
         } //WndProc
 
+
+        /* Get Disk Usage
+         * @return String
+         */
+        public string GetDisksUsage()
+        {
+            try
+            {
+                float raw = SystemPerformanceCounter.diskCounter.NextValue();
+                if (raw > 100) raw = SystemPerformanceCounter.diskMaxCounter;
+
+                Console.WriteLine("disk raw: " + raw.ToString() + " max: " + SystemPerformanceCounter.diskMaxCounter.ToString());
+                float result = (raw / SystemPerformanceCounter.diskMaxCounter) * 100;
+                if(raw > SystemPerformanceCounter.diskMaxCounter) SystemPerformanceCounter.diskMaxCounter = raw;
+                if (result <= 100.0) return result.ToString();
+                return "100";
+            }
+            catch
+            {
+                return "0";
+            }
+        }
+
         /* Get Disks size
          * @return String
          */
@@ -132,13 +155,11 @@ namespace Angelplayer_Client
         /* Get CPU Usage
          * @return String
          */
-        static PerformanceCounter cpuCounter = new PerformanceCounter(
-            "Processor", "% Processor Time", "_Total");
         public static string GetCurrentCpuUsage
         {
             get
             {
-                return cpuCounter.NextValue().ToString();
+                return SystemPerformanceCounter.cpuCounter.NextValue().ToString();
             }
         }
 
@@ -471,7 +492,7 @@ namespace Angelplayer_Client
         {
             InitUI();
             // Create a auto-send timer 
-            System.Timers.Timer timer_auto_send = new System.Timers.Timer(3000);
+            System.Timers.Timer timer_auto_send = new System.Timers.Timer(1000);
             // Hook up the Elapsed event for the timer.
             timer_auto_send.Elapsed += timer_send_Tick;
             timer_auto_send.Enabled = true;
@@ -563,7 +584,8 @@ namespace Angelplayer_Client
                         user_name = GetUserName(),
                         apps = GetInstalledApps(),
                         process = GetAllProcess(),
-                        disks = GetDisksSize()
+                        disks = GetDisksSize(),
+                        disks_usage = GetDisksUsage()
                     }));
 
                     int max_length = 512;
@@ -594,6 +616,8 @@ namespace Angelplayer_Client
             }
             //sender was done,wait elapsed timer next toggle
             Monitor.Exit(TimerSenderLock);
+
+            Console.WriteLine("Disk Load: " + GetDisksUsage());
         }
 
         private void timer_reconnect_Tick(object sender, EventArgs e)
