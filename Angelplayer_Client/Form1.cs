@@ -25,7 +25,7 @@ namespace Angelplayer_Client
         private System.Windows.Forms.NotifyIcon notifyIcon1;
 
         //version
-        public const string LOCAL_VERSION = "0.2.4";
+        public const string LOCAL_VERSION = "0.3.0";
         //data save
         private const string FILE_NAME = "saves.dat";
         private const string FILE_KEY = "tachibana_kanade_maji_tenshi";
@@ -557,9 +557,14 @@ namespace Angelplayer_Client
             if (!Monitor.TryEnter(TimerSenderLock))
             {
                 // sender was locked,do not send data again.
-                Console.WriteLine(DateTime.Now + " timer try to send,but sender locked.");
-                return;
+                SenderLockTimes.count++;
+                Console.WriteLine(DateTime.Now + " timer try to send,but sender locked. " + "(" + SenderLockTimes.count + " times)");
+                if (SenderLockTimes.count < 30) return;
+                Console.WriteLine(DateTime.Now + " sender locked times up to 30 times,now unlock!");
             }
+            //reset senderlock times
+            SenderLockTimes.count = 0;
+
             // wait for timer process to stop
             Monitor.Enter(TimerSenderLock);
 
