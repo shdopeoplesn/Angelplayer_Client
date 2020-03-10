@@ -23,11 +23,6 @@ namespace Angelplayer_Client
         public static PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
     }
 
-    public class SenderLockTimes
-    {
-        public static int count = 0;
-    }
-
     public class ProcessType
     {
         public int pid_ { get; set; }         //process id

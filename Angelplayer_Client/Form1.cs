@@ -551,23 +551,8 @@ namespace Angelplayer_Client
             btn_unlock.Enabled = true;
         }
 
-        private object TimerSenderLock = new object();
         private void timer_send_Tick(object sender, EventArgs e)
         {
-            if (!Monitor.TryEnter(TimerSenderLock))
-            {
-                // sender was locked,do not send data again.
-                SenderLockTimes.count++;
-                Console.WriteLine(DateTime.Now + " timer try to send,but sender locked. " + "(" + SenderLockTimes.count + " times)");
-                if (SenderLockTimes.count < 30) return;
-                Console.WriteLine(DateTime.Now + " sender locked times up to 30 times,now unlock!");
-            }
-            //reset senderlock times
-            SenderLockTimes.count = 0;
-
-            // wait for timer process to stop
-            Monitor.Enter(TimerSenderLock);
-
             //send data when textboxes saved and websocket opened only
             if (btn_unlock.Enabled == true && btn_save.Enabled == false && WS.client.ReadyState.ToString() == "Open") {
                 var ws = WS.client;
@@ -612,7 +597,6 @@ namespace Angelplayer_Client
                     }
                     ws.Send(CompressString("ACK"));
                     Console.WriteLine(DateTime.Now + " data sent to server!");
-                    Monitor.Exit(TimerSenderLock);
                 }
                 catch (Exception ex)
                 {
@@ -620,8 +604,6 @@ namespace Angelplayer_Client
                 }
             }
             //sender was done,wait elapsed timer next toggle
-            Monitor.Exit(TimerSenderLock);
-
             Console.WriteLine("Disk Load: " + GetDisksUsage());
         }
 
