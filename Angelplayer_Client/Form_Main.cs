@@ -99,6 +99,7 @@ namespace Angelplayer_Client
             {
                 //if save.dat is not exitst,then doesn't need to unlock
                 InfoIsLock = false;
+                btn_save.Text = "Save";
             }
 
 
@@ -126,9 +127,14 @@ namespace Angelplayer_Client
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            DataCenter.StartCollect();
             ThreadStartUpdateInfo();
             InitUI();
+
+            //start collect data tasks
+            DataCenter.StartCollect();
+
+            //set CustomID of Datapack
+            DataCenter.CollectCustomID(txt_cid.Text);
 
             await ConnectToSocket();
 
@@ -211,8 +217,7 @@ namespace Angelplayer_Client
         {
             if (!InfoIsLock)
             {
-                //connect to new socket server
-                await ConnectToSocket();
+
                 adminPW = Interaction.InputBox("input admin password", "input admin password", "", -1, -1);
 
                 InfoSave(adminPW);
@@ -232,9 +237,13 @@ namespace Angelplayer_Client
                 SettingPanel.Enabled = true;
                 btn_save.Text = "save";
             }
-
             InfoIsLock = !InfoIsLock;
 
+            //set CustomID of Datapack
+            DataCenter.CollectCustomID(txt_cid.Text);
+
+            //connect to new socket server
+            await ConnectToSocket();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)

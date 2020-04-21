@@ -56,28 +56,28 @@ namespace Angelplayer_Client
             // 
             // txt_host
             // 
-            this.txt_host.Location = new System.Drawing.Point(74, 41);
+            this.txt_host.Location = new System.Drawing.Point(74, 44);
             this.txt_host.Margin = new System.Windows.Forms.Padding(2);
             this.txt_host.Name = "txt_host";
-            this.txt_host.Size = new System.Drawing.Size(76, 22);
+            this.txt_host.Size = new System.Drawing.Size(76, 20);
             this.txt_host.TabIndex = 1;
             this.txt_host.Text = "aisu-alter.nctu.me";
             // 
             // txt_port
             // 
-            this.txt_port.Location = new System.Drawing.Point(74, 70);
+            this.txt_port.Location = new System.Drawing.Point(74, 76);
             this.txt_port.Margin = new System.Windows.Forms.Padding(2);
             this.txt_port.Name = "txt_port";
-            this.txt_port.Size = new System.Drawing.Size(76, 22);
+            this.txt_port.Size = new System.Drawing.Size(76, 20);
             this.txt_port.TabIndex = 2;
             this.txt_port.Text = "7779";
             // 
             // btn_save
             // 
-            this.btn_save.Location = new System.Drawing.Point(92, 290);
+            this.btn_save.Location = new System.Drawing.Point(92, 314);
             this.btn_save.Margin = new System.Windows.Forms.Padding(2);
             this.btn_save.Name = "btn_save";
-            this.btn_save.Size = new System.Drawing.Size(59, 28);
+            this.btn_save.Size = new System.Drawing.Size(59, 30);
             this.btn_save.TabIndex = 3;
             this.btn_save.Text = "unlock";
             this.btn_save.UseVisualStyleBackColor = true;
@@ -86,60 +86,60 @@ namespace Angelplayer_Client
             // lbl_host
             // 
             this.lbl_host.AutoSize = true;
-            this.lbl_host.Location = new System.Drawing.Point(38, 47);
+            this.lbl_host.Location = new System.Drawing.Point(38, 51);
             this.lbl_host.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_host.Name = "lbl_host";
-            this.lbl_host.Size = new System.Drawing.Size(29, 12);
+            this.lbl_host.Size = new System.Drawing.Size(32, 13);
             this.lbl_host.TabIndex = 4;
             this.lbl_host.Text = "Host:";
             // 
             // lbl_port
             // 
             this.lbl_port.AutoSize = true;
-            this.lbl_port.Location = new System.Drawing.Point(38, 77);
+            this.lbl_port.Location = new System.Drawing.Point(38, 83);
             this.lbl_port.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_port.Name = "lbl_port";
-            this.lbl_port.Size = new System.Drawing.Size(27, 12);
+            this.lbl_port.Size = new System.Drawing.Size(29, 13);
             this.lbl_port.TabIndex = 5;
             this.lbl_port.Text = "Port:";
             // 
             // lbl_version
             // 
             this.lbl_version.AutoSize = true;
-            this.lbl_version.Location = new System.Drawing.Point(284, 323);
+            this.lbl_version.Location = new System.Drawing.Point(284, 350);
             this.lbl_version.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_version.Name = "lbl_version";
-            this.lbl_version.Size = new System.Drawing.Size(182, 12);
+            this.lbl_version.Size = new System.Drawing.Size(181, 13);
             this.lbl_version.TabIndex = 6;
             this.lbl_version.Text = "AngelPlayer Control System ver. 0.1b";
             // 
             // lbl_ip
             // 
             this.lbl_ip.AutoSize = true;
-            this.lbl_ip.Location = new System.Drawing.Point(9, 6);
+            this.lbl_ip.Location = new System.Drawing.Point(9, 7);
             this.lbl_ip.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_ip.Name = "lbl_ip";
-            this.lbl_ip.Size = new System.Drawing.Size(32, 12);
+            this.lbl_ip.Size = new System.Drawing.Size(31, 13);
             this.lbl_ip.TabIndex = 7;
             this.lbl_ip.Text = "lbl_ip";
             // 
             // lbl_device_name
             // 
             this.lbl_device_name.AutoSize = true;
-            this.lbl_device_name.Location = new System.Drawing.Point(9, 66);
+            this.lbl_device_name.Location = new System.Drawing.Point(9, 72);
             this.lbl_device_name.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_device_name.Name = "lbl_device_name";
-            this.lbl_device_name.Size = new System.Drawing.Size(84, 12);
+            this.lbl_device_name.Size = new System.Drawing.Size(87, 13);
             this.lbl_device_name.TabIndex = 8;
             this.lbl_device_name.Text = "lbl_device_name";
             // 
             // lbl_mac
             // 
             this.lbl_mac.AutoSize = true;
-            this.lbl_mac.Location = new System.Drawing.Point(81, 26);
+            this.lbl_mac.Location = new System.Drawing.Point(81, 28);
             this.lbl_mac.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_mac.Name = "lbl_mac";
-            this.lbl_mac.Size = new System.Drawing.Size(24, 12);
+            this.lbl_mac.Size = new System.Drawing.Size(27, 13);
             this.lbl_mac.TabIndex = 9;
             this.lbl_mac.Text = "N/A";
             // 
@@ -149,39 +149,39 @@ namespace Angelplayer_Client
             // 
             // txt_cid
             // 
-            this.txt_cid.Location = new System.Drawing.Point(75, 8);
+            this.txt_cid.Location = new System.Drawing.Point(75, 9);
             this.txt_cid.Margin = new System.Windows.Forms.Padding(2);
             this.txt_cid.Name = "txt_cid";
-            this.txt_cid.Size = new System.Drawing.Size(76, 22);
+            this.txt_cid.Size = new System.Drawing.Size(76, 20);
             this.txt_cid.TabIndex = 10;
             // 
             // lbl_cid
             // 
             this.lbl_cid.AutoSize = true;
-            this.lbl_cid.Location = new System.Drawing.Point(11, 15);
+            this.lbl_cid.Location = new System.Drawing.Point(11, 16);
             this.lbl_cid.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_cid.Name = "lbl_cid";
-            this.lbl_cid.Size = new System.Drawing.Size(59, 12);
+            this.lbl_cid.Size = new System.Drawing.Size(59, 13);
             this.lbl_cid.TabIndex = 11;
             this.lbl_cid.Text = "Custom ID:";
             // 
             // lbl_user_name
             // 
             this.lbl_user_name.AutoSize = true;
-            this.lbl_user_name.Location = new System.Drawing.Point(9, 46);
+            this.lbl_user_name.Location = new System.Drawing.Point(9, 50);
             this.lbl_user_name.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_user_name.Name = "lbl_user_name";
-            this.lbl_user_name.Size = new System.Drawing.Size(73, 12);
+            this.lbl_user_name.Size = new System.Drawing.Size(75, 13);
             this.lbl_user_name.TabIndex = 12;
             this.lbl_user_name.Text = "lbl_user_name";
             // 
             // lbl_os_version
             // 
             this.lbl_os_version.AutoSize = true;
-            this.lbl_os_version.Location = new System.Drawing.Point(9, 86);
+            this.lbl_os_version.Location = new System.Drawing.Point(9, 93);
             this.lbl_os_version.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_os_version.Name = "lbl_os_version";
-            this.lbl_os_version.Size = new System.Drawing.Size(73, 12);
+            this.lbl_os_version.Size = new System.Drawing.Size(74, 13);
             this.lbl_os_version.TabIndex = 13;
             this.lbl_os_version.Text = "lbl_os_version";
             // 
@@ -191,30 +191,30 @@ namespace Angelplayer_Client
             // 
             // txt_passwd
             // 
-            this.txt_passwd.Location = new System.Drawing.Point(74, 104);
+            this.txt_passwd.Location = new System.Drawing.Point(74, 113);
             this.txt_passwd.Margin = new System.Windows.Forms.Padding(2);
             this.txt_passwd.Name = "txt_passwd";
-            this.txt_passwd.Size = new System.Drawing.Size(76, 22);
+            this.txt_passwd.Size = new System.Drawing.Size(76, 20);
             this.txt_passwd.TabIndex = 15;
             this.txt_passwd.Visible = false;
             // 
             // lbl_cpu
             // 
             this.lbl_cpu.AutoSize = true;
-            this.lbl_cpu.Location = new System.Drawing.Point(9, 103);
+            this.lbl_cpu.Location = new System.Drawing.Point(9, 112);
             this.lbl_cpu.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_cpu.Name = "lbl_cpu";
-            this.lbl_cpu.Size = new System.Drawing.Size(40, 12);
+            this.lbl_cpu.Size = new System.Drawing.Size(41, 13);
             this.lbl_cpu.TabIndex = 16;
             this.lbl_cpu.Text = "lbl_cpu";
             // 
             // lbl_mem
             // 
             this.lbl_mem.AutoSize = true;
-            this.lbl_mem.Location = new System.Drawing.Point(9, 124);
+            this.lbl_mem.Location = new System.Drawing.Point(9, 134);
             this.lbl_mem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_mem.Name = "lbl_mem";
-            this.lbl_mem.Size = new System.Drawing.Size(46, 12);
+            this.lbl_mem.Size = new System.Drawing.Size(45, 13);
             this.lbl_mem.TabIndex = 17;
             this.lbl_mem.Text = "lbl_mem";
             // 
@@ -226,10 +226,10 @@ namespace Angelplayer_Client
             // lbl_mac1
             // 
             this.lbl_mac1.AutoSize = true;
-            this.lbl_mac1.Location = new System.Drawing.Point(8, 26);
+            this.lbl_mac1.Location = new System.Drawing.Point(8, 28);
             this.lbl_mac1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_mac1.Name = "lbl_mac1";
-            this.lbl_mac1.Size = new System.Drawing.Size(74, 12);
+            this.lbl_mac1.Size = new System.Drawing.Size(74, 13);
             this.lbl_mac1.TabIndex = 18;
             this.lbl_mac1.Text = "MAC Address:";
             // 
@@ -242,16 +242,16 @@ namespace Angelplayer_Client
             this.SettingPanel.Controls.Add(this.txt_passwd);
             this.SettingPanel.Controls.Add(this.lbl_port);
             this.SettingPanel.Controls.Add(this.txt_cid);
-            this.SettingPanel.Location = new System.Drawing.Point(1, 151);
+            this.SettingPanel.Location = new System.Drawing.Point(1, 164);
             this.SettingPanel.Name = "SettingPanel";
-            this.SettingPanel.Size = new System.Drawing.Size(182, 134);
+            this.SettingPanel.Size = new System.Drawing.Size(182, 145);
             this.SettingPanel.TabIndex = 19;
             // 
-            // Form1
+            // Form_main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 343);
+            this.ClientSize = new System.Drawing.Size(511, 372);
             this.Controls.Add(this.SettingPanel);
             this.Controls.Add(this.lbl_mac1);
             this.Controls.Add(this.lbl_mem);
@@ -266,7 +266,7 @@ namespace Angelplayer_Client
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "Form_main";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Angelplayer_Client";

@@ -39,7 +39,7 @@ namespace Angelplayer_Client
                 if (client.IsAlive)
                     client.Close();
                 client = new WebSocket($@"ws://{host}:{port}");
-                client.WaitTime = TimeSpan.FromSeconds(15000);
+                client.WaitTime = TimeSpan.FromSeconds(10);
                 client.Connect();
                 client.OnMessage += (sender1, e1) =>
                 {

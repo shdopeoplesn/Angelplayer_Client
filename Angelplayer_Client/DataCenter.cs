@@ -22,7 +22,6 @@ namespace Angelplayer_Client
         public DataCenter()
         {
             mydata = new DataPack();
-
         }
 
        public void StartCollect()
@@ -43,6 +42,14 @@ namespace Angelplayer_Client
         {
             StopCollect();
             StartCollect();
+        }
+
+        //
+        // 摘要:
+        //     set CustomID to Datapack.
+        public void CollectCustomID(String cid)
+        {
+            mydata.cid = cid;
         }
 
         public async void InfoCollect()
